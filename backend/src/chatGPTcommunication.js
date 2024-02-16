@@ -10,7 +10,9 @@ async function imageCaloriesRequest({description, imageUrl}) {
      provide again this json object with assumptions about the fields with the assumptions coming  from average values.
      Ensure that the weight and calories are integers, and the calories are proportional to the weight. 
      For instance, if the item typically contains 200 calories per 100 grams and its weight in the image is 200 grams,
-     the calories should be 400. If there are multiple food items, separate them with commas.
+     the calories should be 400. If there are multiple food items, separate them with commas.You always need to provide some json objects
+     as a response and the format should always be {"food": "foodname", "weight": weight, "calories": calories } for more than one item
+     seperate them with commas and remember to give as response a valid json object no matter what. The format is super important!
      If no items are found, return {"food": "no items"}. Either case you should only provide the json object or the {"food": "no items"} response and nothing else ever!`;
 
     if(description !== ''){

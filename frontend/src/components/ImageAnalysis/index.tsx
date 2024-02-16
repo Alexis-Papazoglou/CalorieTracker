@@ -13,18 +13,17 @@ interface ImageAnalysisProps {
 
 const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
   const [description, setDescription] = useState<string>('');
-  const { takeImage, pickImageFromGallery, analyzeImage, image, setImage, analysis, loading, error } = useImageAnalysis('http://192.168.1.19:3000/analyze', description);
+  const { takeImage, pickImageFromGallery, analyzeImage, image, setImage, analysis, loading, error } = useImageAnalysis('https://foodimageanalysisapi.onrender.com/analyze', description);
 
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await fetch('http://192.168.1.19:3000/');
-      const response = await data.json();
-      console.log(response);
-
-    }
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const data = await fetch('https://foodimageanalysisapi.onrender.com/');
+  //     const response = await data.json();
+  //     console.log(response);
+  //   }
+  //   fetchData();
+  // }, []);
 
 
   function handleAnalyzeImage() {

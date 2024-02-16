@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { storage } from '../firebase';
 import { FoodItem } from '../src/globalTypes';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
@@ -71,9 +72,16 @@ const useImageAnalysis = (url: string , description : string | null) => {
       // create a reference to the image in Firebase Cloud Storage
       const imageRef = ref(storage, `images/${imageId}`);
 
+      //resize to reduce the upload size and time
+      const resizedImage = await ImageManipulator.manipulateAsync(
+        image,
+        [{ resize: { width: 1000 } }], 
+        { compress: 0.85, format: ImageManipulator.SaveFormat.JPEG}
+      );
+
       // Convert the URI to a Blob
-      const res = await fetch(image);
-      const blob = await res.blob();
+      const blobRes = await fetch(resizedImage.uri);
+      const blob = await blobRes.blob();
 
       // upload the image to Firebase Cloud Storage
       const uploadTask = uploadBytesResumable(imageRef, blob);

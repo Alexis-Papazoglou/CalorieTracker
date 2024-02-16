@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     console.log('Server is running')
+    res.json({ message: 'Server is running' });
 });
 
 // POST /analyze endpoint

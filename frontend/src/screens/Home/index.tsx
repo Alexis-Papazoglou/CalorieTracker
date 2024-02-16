@@ -1,10 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function Home() {
+  const [hello, setHello] = React.useState('Connecting to server...')
+
+  useEffect(() => {
+    async function fetchHello(){
+      const res = await fetch('https://foodimageanalysisapi.onrender.com/')
+      const data = await res.json()
+      console.log(data)
+      setHello(data.message)
+    }
+    fetchHello()
+  }, [])
+
   return (
     <View>
-      <Text>Home</Text>
+      <Text>{hello}</Text>
     </View>
   )
 }
