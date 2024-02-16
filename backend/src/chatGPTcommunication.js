@@ -38,7 +38,7 @@ async function imageCaloriesRequest({description, imageUrl}) {
                 ],
             },
         ],
-        max_tokens: 50 // Increase this value to get a longer response
+        max_tokens: 1000 // Increase this value to get a longer response
     });
 
     return (response.choices[0].message.content);
