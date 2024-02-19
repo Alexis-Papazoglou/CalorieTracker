@@ -1,14 +1,33 @@
 function createJSONfromChatResponse(foodData) {
-    // Replace single quotes with double quotes and add quotes around keys
-    const formattedFoodData = foodData.replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+    // Parse the string response to a JavaScript object
+    const responseData = JSON.parse(foodData);
 
-    // Wrap the string in square brackets to make it a valid JSON array string
-    const jsonArrayString = `[${formattedFoodData}]`;
+    // If the response indicates no items, return immediately
+    if (responseData.food === "no items") {
+        return responseData;
+    }
 
-    // Use JSON.parse() to convert the string to a JavaScript object
-    const foodArray = JSON.parse(jsonArrayString);
+    // Extract general title and food items
+    const generalTitle = responseData.general_title || "";
+    const foodItems = responseData.food_items || [];
 
-    return foodArray;
+    // Construct an array of JSON objects for food items
+    const foodArray = foodItems.map(item => {
+        return {
+            food: item.food,
+            weight: parseInt(item.weight),
+            calories: parseInt(item.calories),
+            fat: parseInt(item.fat)
+        };
+    });
+
+    // Construct the final JSON object
+    const finalJSON = {
+        general_title: generalTitle,
+        food_items: foodArray
+    };
+
+    return finalJSON;
 }
 
 module.exports = createJSONfromChatResponse;

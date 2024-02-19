@@ -22,8 +22,7 @@ const useImageAnalysis = (url: string , description : string | null) => {
   
     let result: ImagePicker.ImagePickerResult = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
       quality: 1,
     });
   
@@ -46,8 +45,7 @@ const useImageAnalysis = (url: string , description : string | null) => {
   
     let result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
       quality: 1,
     });
   
@@ -70,7 +68,7 @@ const useImageAnalysis = (url: string , description : string | null) => {
       const imageId = Date.now().toString();
 
       // create a reference to the image in Firebase Cloud Storage
-      const imageRef = ref(storage, `images/${imageId}`);
+      const imageRef = ref(storage, `${imageId}`);
 
       //resize to reduce the upload size and time
       const resizedImage = await ImageManipulator.manipulateAsync(
