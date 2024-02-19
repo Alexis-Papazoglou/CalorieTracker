@@ -26,7 +26,7 @@ app.post('/analyze', async (req, res) => {
     async function getAndSendChatResponse() {
         const chatResponse = await imageCaloriesRequest({ description, imageUrl });
         if (chatResponse !== null) {
-            console.log('chatResponse:', chatResponse);
+            console.log('chatResponse:',chatResponse,'end');
             const foodArray = createJSONfromChatResponse(chatResponse);
             console.log(foodArray);
             res.json(foodArray);
