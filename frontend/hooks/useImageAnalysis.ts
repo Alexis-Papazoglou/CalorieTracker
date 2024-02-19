@@ -2,12 +2,12 @@ import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { storage } from '../firebase';
-import { FoodItem } from '../src/globalTypes';
+import { FoodItem, Meal } from '../src/globalTypes';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 
 const useImageAnalysis = (url: string , description : string | null) => {
   const [image, setImage] = useState<string | null>(null);
-  const [analysis, setAnalysis] = useState<FoodItem[] | null>(null);
+  const [analysis, setAnalysis] = useState<Meal | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // new loading state
 

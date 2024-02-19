@@ -105,7 +105,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
       </View>
         {analysis && (
           <FlatList
-            data={analysis}
+            data={analysis.food_items}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={TableHeader}
