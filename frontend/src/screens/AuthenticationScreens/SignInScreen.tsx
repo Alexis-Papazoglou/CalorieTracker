@@ -3,8 +3,18 @@ import React, { useState, useContext } from 'react';
 import { Button, TextInput, Text, StyleSheet } from 'react-native';
 import { AuthContext } from '../../../Context/ContextProvider';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../navigation'; 
+import { StackNavigationProp } from '@react-navigation/stack';
+import { colors } from '../../constants/colors';
+
+type SignInScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'SignIn'
+>;
 
 export default function SignInScreen() {
+    const navigation = useNavigation<SignInScreenNavigationProp>();
     const [email, setEmail] = useState('test@gmail.com');
     const [password, setPassword] = useState('testtest');
     const auth = useContext(AuthContext);
@@ -17,11 +27,8 @@ export default function SignInScreen() {
         }
     };
 
-    const handleSignUp = async () => {
-        const errorMessage = await auth?.signUp(email, password);
-        if (errorMessage) {
-            setError(errorMessage);
-        }
+    const handleSignUp = () => {
+        navigation.navigate('CreateAccountBodyForm');
     };
 
     return (
@@ -49,6 +56,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: colors.primary,
     },
     error: {
         color: 'red',

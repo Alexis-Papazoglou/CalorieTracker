@@ -3,13 +3,15 @@ import { View, TouchableOpacity, Text, Modal, Animated, StyleSheet } from 'react
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImageAnalysis from '../components/ImageAnalysis';
-import colors from '../constants/colors';
-import { primaryShadow , secondaryShadow } from '../constants/shadows';
+import { colors } from '../constants/colors';
+import { primaryShadow, secondaryShadow } from '../constants/shadows';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const [modalVisible, setModalVisible] = useState(false);
     const [animation] = useState(new Animated.Value(0));
+
+    const iconNames = ['home', 'calendar', 'add', 'rose-outline', 'person']; // Add more icon names as needed
 
     const slideUp = () => {
         Animated.timing(animation, {
@@ -36,7 +38,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
         const insets = useSafeAreaInsets();
 
         return (
-            <View style={[styles.container, { paddingBottom: insets.bottom , height: 50 + insets.bottom }]}>
+            <View style={[styles.container, { paddingBottom: insets.bottom, height: 50 + insets.bottom }]}>
                 {state.routes.map((route: { key: string; name: string; }, index: number) => {
                     const { options } = descriptors[route.key];
                     let label: string | undefined;
@@ -75,7 +77,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
 
                     const isAddButton = route.name === 'ADD';
                     const buttonStyle = isAddButton ? styles.addButton : styles.tabButton;
-                    const iconName = isAddButton ? 'add-circle' : 'home'; // change as needed
+                    const iconName = isAddButton ? 'add-circle' : iconNames[index];
 
                     return (
                         <TouchableOpacity onPress={onPress} key={route.key} style={buttonStyle}>

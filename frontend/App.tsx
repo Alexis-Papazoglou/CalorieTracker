@@ -4,7 +4,6 @@ import Navigation from './src/navigation';
 import { StatusBar } from 'expo-status-bar';
 import { AuthContext } from './Context/ContextProvider';
 import { useAuth } from './hooks/useAuth';
-import SignInScreen from './src/screens/SignInScreen/SignInScreen';
 import LoadingScreen from './src/components/LoadingScreen';
 
 export default function App() {
@@ -14,10 +13,8 @@ export default function App() {
     <AuthContext.Provider value={auth}>
       {auth.initializing ? (
         <LoadingScreen />
-      ) : auth.user ? (
-        <Navigation />
       ) : (
-        <SignInScreen />
+        <Navigation />
       )}
       <StatusBar style="dark" />
     </AuthContext.Provider>

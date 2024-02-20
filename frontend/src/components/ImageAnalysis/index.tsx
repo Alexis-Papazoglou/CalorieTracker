@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Image, FlatList, SafeAreaView } from 'react-native';
-import colors from '../../constants/colors';
+import { colors } from '../../constants/colors';
 import { primaryShadow, secondaryShadow } from '../../constants/shadows';
 import useImageAnalysis from '../../../hooks/useImageAnalysis';
 import { Alert } from 'react-native';
@@ -46,7 +46,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
     }
   }
 
-  function handleReset(){
+  function handleReset() {
     setImage('');
     setDescription('');
   }
@@ -69,40 +69,40 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
-    <View style={styles.container}>
-      <TouchableOpacity onPress={close} style={styles.closeBtn}>
-        <Text style={{ color: colors.primary, fontSize: 16 }}>Close</Text>
-      </TouchableOpacity>
-      <Text style={{ fontSize: 24 }}>Food Image Analysis</Text>
-      <View style={styles.textContainer}>
-        <Text style={styles.dummyText}>
-          Take a picture of food or upload one from your gallery to get started!
-        </Text>
-        <Text style={styles.dummyText}>
-          It would be very useful to add a description to help the AI recognize the food.
-        </Text>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-        <TextInput
-          style={styles.input}
-          onChangeText={setDescription}
-          value={description || ''}
-          placeholder="E.g : Chicken, Rice, etc."
-        />
-        {!image && <TouchableOpacity disabled={loading} onPress={takeImage} style={styles.button}>
-          <Text style={{ color: colors.primary, fontSize: 16 }}>Take Picture</Text>
-        </TouchableOpacity>}
-        {!image && <TouchableOpacity disabled={loading} onPress={pickImageFromGallery} style={styles.button}>
-          <Text style={{ color: colors.primary, fontSize: 16 }}>Pick from Gallery</Text>
-        </TouchableOpacity>}
-        {image && <TouchableOpacity disabled={loading} onPress={handleAnalyzeImage} style={styles.button}>
-          <Text style={{ color: colors.primary, fontSize: 16 }}>Analyze</Text>
-        </TouchableOpacity>}
-        {image && <TouchableOpacity disabled={loading} onPress={handleReset} style={styles.button}>
-          <Text style={{ color: colors.primary, fontSize: 16 }}>New Image</Text>
-        </TouchableOpacity>}
-        {loading && <Text>Loading...</Text>}
-        {error && <Text style={styles.errorText}>{error.message}</Text>}
-      </View>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={close} style={styles.closeBtn}>
+          <Text style={{ color: colors.primary, fontSize: 16 }}>Close</Text>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 24 }}>Food Image Analysis</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.dummyText}>
+            Take a picture of food or upload one from your gallery to get started!
+          </Text>
+          <Text style={styles.dummyText}>
+            It would be very useful to add a description to help the AI recognize the food.
+          </Text>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
+          <TextInput
+            style={styles.input}
+            onChangeText={setDescription}
+            value={description || ''}
+            placeholder="E.g : Chicken, Rice, etc."
+          />
+          {!image && <TouchableOpacity disabled={loading} onPress={takeImage} style={styles.button}>
+            <Text style={{ color: colors.primary, fontSize: 16 }}>Take Picture</Text>
+          </TouchableOpacity>}
+          {!image && <TouchableOpacity disabled={loading} onPress={pickImageFromGallery} style={styles.button}>
+            <Text style={{ color: colors.primary, fontSize: 16 }}>Pick from Gallery</Text>
+          </TouchableOpacity>}
+          {image && <TouchableOpacity disabled={loading} onPress={handleAnalyzeImage} style={styles.button}>
+            <Text style={{ color: colors.primary, fontSize: 16 }}>Analyze</Text>
+          </TouchableOpacity>}
+          {image && <TouchableOpacity disabled={loading} onPress={handleReset} style={styles.button}>
+            <Text style={{ color: colors.primary, fontSize: 16 }}>New Image</Text>
+          </TouchableOpacity>}
+          {loading && <Text>Loading...</Text>}
+          {error && <Text style={styles.errorText}>{error.message}</Text>}
+        </View>
         {analysis && (
           <FlatList
             data={analysis.food_items}
@@ -112,7 +112,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
             style={{ width: '100%' }}
           />
         )}
-    </View>
+      </View>
     </SafeAreaView>
   );
 };
