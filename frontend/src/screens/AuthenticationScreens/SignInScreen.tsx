@@ -45,7 +45,7 @@ export default function SignInScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.welcomeTextView}>
         <Text style={styles.welcomeText}>Welcome to</Text>
-        <Text style={[styles.welcomeText, { color: "red" }]}>
+        <Text style={[styles.welcomeText, { color: "red" , fontFamily:'AmericanTypewriter' , fontSize: 32 }]}>
           CALORIE TRACKER
         </Text>
       </View>
@@ -88,9 +88,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   welcomeText: {
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: "bold",
-    width: 320,
+    width: '100%',
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
   },
   input: {
     backgroundColor: "white",

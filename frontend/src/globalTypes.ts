@@ -7,8 +7,10 @@ export interface FoodItem {
 }
 
 export interface Meal {
-  general_title: string;
-  date: string;
-  imageUrl?: string;
-  food_items: FoodItem[];
+  food?: string; // case backend returns : {food: "no items"}
+  general_title: string; // created on backend
+  date?: number; // created on frontend
+  imageUrl?: string; // created on frontend
+  totalMealCalories?: number; // created on frontend
+  food_items: FoodItem[]; // created on backend
 }

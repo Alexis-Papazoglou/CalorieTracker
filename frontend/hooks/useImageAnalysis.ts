@@ -138,6 +138,7 @@ const useImageAnalysis = (url: string, description: string | null) => {
     pickImageFromGallery,
     analyzeImage,
     setImage,
+    setAnalysis,
     image,
     analysis,
     error,
