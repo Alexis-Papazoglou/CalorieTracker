@@ -5,7 +5,8 @@ import { getDoc, doc } from "firebase/firestore";
 import { firestore } from "../../../firebase";
 import { User, Meal } from "../../globalTypes";
 import useFetchMealsOfDay from "../../../hooks/useFetchMealsOfDay";
-import TodayMeals from "../../components/HomeScreenComponents/TodayMeals";
+import DayMeals from "../../components/HomeScreenComponents/DayMeals";
+import { getDate } from "../../utils";
 
 export default function Home() {
   const [userData, setUserData] = useState<User>();
@@ -17,10 +18,11 @@ export default function Home() {
   }
   const { user } = auth;
 
-  // Fetch today's meals
-  const today = new Date();
-  const dateString = today.toISOString().split("T")[0]; // format: "YYYY-MM-DD"
-  const { meals: mealsData, error } = useFetchMealsOfDay(dateString);
+  // Fetch  meals
+  const today = getDate("today"); // utility function to get a day's date
+  const { meals: todayMealsData, error : todaysError } = useFetchMealsOfDay(today);
+  const yesterday = getDate("yesterday"); // utility function to get a day's date
+  const { meals: yesterdayMealsData, error : yesterdayError } = useFetchMealsOfDay(yesterday);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -40,12 +42,12 @@ export default function Home() {
 
   useEffect(() => {
     // Calculate total calories whenever meals change
-    const total = mealsData.reduce(
+    const total = todayMealsData.reduce(
       (total, meal) => total + (meal.totalMealCalories || 0),
       0
     );
     setTotalCalories(total);
-  }, [mealsData]);
+  }, [todayMealsData]);
 
   return (
     <ScrollView>
@@ -54,8 +56,9 @@ export default function Home() {
           <Text>Welcome {userData.username}</Text>
           <Text>Your daily calories: {userData.dailyCalories}</Text>
           <Text>Total meal calories: {totalCalories}</Text>
-          {error && <Text>Error fetching meals{error}</Text>}
-          <TodayMeals meals={mealsData} />
+          {todaysError && <Text>Error fetching meals{todaysError}</Text>}
+          <DayMeals date={today} meals={todayMealsData} />
+          <DayMeals date={yesterday} meals={yesterdayMealsData} />
         </View>
       )}
     </ScrollView>

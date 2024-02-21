@@ -4,12 +4,13 @@ import { Meal } from "../../globalTypes";
 
 interface TodayMealsProps {
   meals: Meal[];
+  date: string;
 }
 
-export default function TodayMeals({ meals }: TodayMealsProps) {
+export default function DayMeals({ date,meals }: TodayMealsProps) {
   return (
     <View style={styles.container}>
-      <Text>TodayMeals</Text>
+      <Text>Meals for {date}</Text>
       {meals.map((meal, index) => (
         <View key={index} style={styles.meal}>
           <Text>{meal.general_title}</Text>
