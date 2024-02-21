@@ -25,7 +25,6 @@ function createJSONfromChatResponse(foodData) {
             calories: parseInt(item.calories),
             fat: parseInt(item.fat),
             protein: parseInt(item.protein),
-            quantity: parseInt(item.quantity)
         };
     });
 
