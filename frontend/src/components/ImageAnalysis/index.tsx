@@ -87,6 +87,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
             onChangeText={setDescription}
             value={description || ''}
             placeholder="E.g : Chicken, Rice, etc."
+            placeholderTextColor={'gray'}
           />
           {!image && <TouchableOpacity disabled={loading} onPress={takeImage} style={styles.button}>
             <Text style={{ color: colors.primary, fontSize: 16 }}>Take Picture</Text>
@@ -147,14 +148,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 5,
     marginTop: 10,
     marginBottom: 10,
     padding: 10,
-    width: '100%',
+    width: 250,
     ...secondaryShadow,
+    color: colors.secondary,
   },
   button: {
     backgroundColor: colors.secondary,

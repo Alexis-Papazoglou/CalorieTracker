@@ -45,6 +45,7 @@ export function useAuth(): AuthContextProps {
             if (error instanceof Error) {
                 setLastError(error.message);
             }
+            throw error;
         }
     };
 
@@ -90,6 +91,7 @@ export function useAuth(): AuthContextProps {
             if (error instanceof Error) {
                 setLastError(error.message);
             }
+            throw error;
         }
     };
 
@@ -102,6 +104,7 @@ export function useAuth(): AuthContextProps {
             if (error instanceof Error) {
                 setLastError(error.message);
             }
+            throw error;
         }
     };
 
