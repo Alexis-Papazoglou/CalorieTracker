@@ -18,10 +18,9 @@ async function imageCaloriesRequest({ description, imageUrl }) {
     "calories": The calorie count of the food item, represented as a positive integer.
     "fat": The fat content of the food item (in grams), represented as a positive integer.
     "protein": The protein content of the food item (in grams), represented as a positive integer.
-    "quantity": The quantity of the food item, represented as a positive integer.This field should be 1 if it is unclear from the image.
     Additional Requirements:
 
-    The weight, calorie count, protein content, quantity and fat content should always be integers.
+    The weight, calorie count, protein content and fat content should always be integers.
     Ensure that the calorie count , protein content and fat content are proportional to the weight.
     If the image analysis is uncertain or ambiguous regarding a specific item, make assumptions based on average values for the fields.
     If the image analysis cannot confidently identify any food items, return the "food": "no items" response.
@@ -30,7 +29,7 @@ async function imageCaloriesRequest({ description, imageUrl }) {
     Avoid common errors such as misspellings, missing or incorrect data fields, or invalid JSON syntax.
     Example Response:
 
-    {"general_title": "Fried Chicken and Potatoes","food_items": [{"food": "chicken", "weight": 200, "calories": 400, "fat": 20, "protein": 80 , "quantity: 1"},{"food": "potatoes", "weight": 150, "calories": 200, "fat": 5, "protein": 10 , "quantity: 2"}]}
+    {"general_title": "Fried Chicken and Potatoes","food_items": [{"food": "chicken", "weight": 200, "calories": 400, "fat": 20, "protein": 80 },{"food": "potatoes", "weight": 150, "calories": 200, "fat": 5, "protein": 10 }]}
 
     Note: It's crucial to ensure that the response adheres precisely to the specified format, data types, and requirements in all scenarios. This level of precision minimizes error potential, enhances user satisfaction, and maintains the credibility and reliability of the service.
 

@@ -37,6 +37,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
     description
   );
 
+
   function handleAnalyzeImage() {
     if (description === "") {
       Alert.alert(
@@ -66,13 +67,26 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
     setDescription("");
   }
 
-  const renderItem = ({ item }: { item: FoodItem }) => (
-    <View style={styles.item}>
-      <Text style={styles.value}>{item.food}</Text>
-      <Text style={styles.value}>{item.weight}</Text>
-      <Text style={styles.value}>{item.calories}</Text>
-    </View>
-  );
+  const renderItem = ({ item, index }: { item: FoodItem; index: number }) => {  
+    
+    function handleChange(arg0: string, text: string): void {
+      throw new Error("Function not implemented.");
+    }
+
+    return (
+      <View style={styles.item}>
+        <Text style={styles.value}>{item.food}</Text>
+        <Text style={styles.value}>{item.weight}</Text>
+        <TextInput
+          style={styles.input}
+          inputMode="numeric"
+          onChangeText={text => handleChange('calories', text)}
+          value={item.calories.toString()}
+          placeholder="Calories"
+        />
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
