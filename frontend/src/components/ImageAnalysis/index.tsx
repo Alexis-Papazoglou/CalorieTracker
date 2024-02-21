@@ -132,7 +132,6 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
         });
       }
     }
-    console.log(analysis);
   }, [analysis]);
 
   useEffect(() => {

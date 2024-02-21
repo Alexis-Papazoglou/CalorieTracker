@@ -14,3 +14,19 @@ export interface Meal {
   totalMealCalories?: number; // created on frontend
   food_items: FoodItem[]; // created on backend
 }
+export interface User {
+  bodyInfo: {
+    age: number;
+    bodyType: string;
+    gender: string;
+    goal: string;
+    height: number;
+    trainingActivity: string;
+    weight: number;
+  };
+  dailyCalories: number;
+  email: string;
+  uid: string;
+  username: string;
+  userMeals?: Meal[]; // subcollection
+}
