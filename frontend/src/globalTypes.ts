@@ -1,12 +1,15 @@
 export interface FoodItem {
-    food: string;
-    calories: number;
-    weight: number;
-    quantity: number;
+  food: string;
+  weight: number;
+  calories: number;
+  fat: number;
+  protein: number;
+  quantity?: number;
 }
 
 export interface Meal {
-    title: string;
-    date: string;
-    food_items: FoodItem[];
+  general_title: string;
+  date: string;
+  imageUrl?: string;
+  food_items: FoodItem[];
 }

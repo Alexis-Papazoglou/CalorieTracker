@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigation';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { Picker } from '@react-native-picker/picker';
-import { colors } from '../../constants/colors';
-import { primaryButton, primaryButtonText } from '../../constants/buttons';
-import { Dimensions } from 'react-native';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Picker } from "@react-native-picker/picker";
+import { colors } from "../../constants/colors";
+import { primaryButton, primaryButtonText } from "../../constants/buttons";
+import { Dimensions } from "react-native";
 
-type navigationProp = StackNavigationProp<RootStackParamList, 'CreateAccountBodyForm'>;
-const screenWidth = Dimensions.get('window').width;
+type navigationProp = StackNavigationProp<
+  RootStackParamList,
+  "CreateAccountBodyForm"
+>;
+const screenWidth = Dimensions.get("window").width;
 
 export default function CreateAccountBodyForm() {
   const navigation = useNavigation<navigationProp>();
@@ -18,23 +30,26 @@ export default function CreateAccountBodyForm() {
       weight: 0,
       height: 0,
       age: 0,
-      trainingActivity: 'never',
-      gender: 'male',
-      bodyType: 'skinny',
-      goal: 'lose weight',
-      timeGoal: '1 month',
+      trainingActivity: "never",
+      gender: "male",
+      bodyType: "skinny",
+      goal: "lose weight",
+      timeGoal: "1 month",
     },
   });
 
   async function getDailyCaloriesForUser(): Promise<number> {
     try {
-      const res = await fetch('https://foodimageanalysisapi.onrender.com/calculateDailyCalories', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userDetails.bodyValues),
-      });
+      const res = await fetch(
+        "https://foodimageanalysisapi.onrender.com/calculateDailyCalories",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userDetails.bodyValues),
+        }
+      );
 
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -51,16 +66,37 @@ export default function CreateAccountBodyForm() {
 
   async function handlePress() {
     // Check if all fields are filled
-    const { weight, height, age, trainingActivity, gender, bodyType, goal, timeGoal } = userDetails.bodyValues;
-    if (!weight || !height || !age || !trainingActivity || !gender || !bodyType || !goal || !timeGoal) {
-      alert('Please fill all fields');
+    const {
+      weight,
+      height,
+      age,
+      trainingActivity,
+      gender,
+      bodyType,
+      goal,
+      timeGoal,
+    } = userDetails.bodyValues;
+    if (
+      !weight ||
+      !height ||
+      !age ||
+      !trainingActivity ||
+      !gender ||
+      !bodyType ||
+      !goal ||
+      !timeGoal
+    ) {
+      alert("Please fill all fields");
       return;
     }
     console.log(userDetails.bodyValues);
-    
+
     try {
       const response = await getDailyCaloriesForUser();
-      navigation.navigate('CreateAccountAuthDetails', { userDetails, dailyCalories: response });
+      navigation.navigate("CreateAccountAuthDetails", {
+        userDetails,
+        dailyCalories: response,
+      });
     } catch (error) {
       console.error(`An error occurred: ${error}`);
     }
@@ -68,38 +104,73 @@ export default function CreateAccountBodyForm() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ ...styles.scrollView, width: screenWidth }}>
+      <ScrollView
+        contentContainerStyle={{ ...styles.scrollView, width: screenWidth }}
+      >
         <Text style={styles.headerText}>Provide your details</Text>
-        <Text style={styles.parText}>Providing your details we will be able to calculate the calorie intake you need to achieve your goal</Text>
+        <Text style={styles.parText}>
+          Providing your details we will be able to calculate the calorie intake
+          you need to achieve your goal
+        </Text>
         <TextInput
-          keyboardType='numeric'
+          keyboardType="numeric"
           style={styles.textInput}
           placeholder="Weight (kg)"
-          value={userDetails.bodyValues.weight === 0 ? '' : userDetails.bodyValues.weight.toString()}
-          onChangeText={(text) => setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, weight: Number(text) } }))}
+          value={
+            userDetails.bodyValues.weight === 0
+              ? ""
+              : userDetails.bodyValues.weight.toString()
+          }
+          onChangeText={(text) =>
+            setUserDetails((prevState) => ({
+              ...prevState,
+              bodyValues: { ...prevState.bodyValues, weight: Number(text) },
+            }))
+          }
         />
         <TextInput
           style={styles.textInput}
-          keyboardType='numeric'
+          keyboardType="numeric"
           placeholder="Height (cm)"
-          value={userDetails.bodyValues.height === 0 ? '' : userDetails.bodyValues.height.toString()}
-          onChangeText={(text) => setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, height: Number(text) } }))}
+          value={
+            userDetails.bodyValues.height === 0
+              ? ""
+              : userDetails.bodyValues.height.toString()
+          }
+          onChangeText={(text) =>
+            setUserDetails((prevState) => ({
+              ...prevState,
+              bodyValues: { ...prevState.bodyValues, height: Number(text) },
+            }))
+          }
         />
         <TextInput
-          keyboardType='numeric'
+          keyboardType="numeric"
           style={styles.textInput}
           placeholder="Age"
-          value={userDetails.bodyValues.age === 0 ? '' : userDetails.bodyValues.age.toString()}
-          onChangeText={(text) => setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, age: Number(text) } }))}
+          value={
+            userDetails.bodyValues.age === 0
+              ? ""
+              : userDetails.bodyValues.age.toString()
+          }
+          onChangeText={(text) =>
+            setUserDetails((prevState) => ({
+              ...prevState,
+              bodyValues: { ...prevState.bodyValues, age: Number(text) },
+            }))
+          }
         />
         <View style={styles.pickersContainer}>
           <Text style={styles.pickerText}>Gender</Text>
           <Picker
-            mode='dialog'
+            mode="dialog"
             style={styles.picker}
             selectedValue={userDetails.bodyValues.gender}
             onValueChange={(itemValue) =>
-              setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, gender: itemValue } }))
+              setUserDetails((prevState) => ({
+                ...prevState,
+                bodyValues: { ...prevState.bodyValues, gender: itemValue },
+              }))
             }
           >
             <Picker.Item label="Male" value="male" />
@@ -107,11 +178,17 @@ export default function CreateAccountBodyForm() {
           </Picker>
           <Text style={styles.pickerText}>Training activity</Text>
           <Picker
-            mode='dropdown'
+            mode="dropdown"
             style={styles.picker}
             selectedValue={userDetails.bodyValues.trainingActivity}
             onValueChange={(itemValue) =>
-              setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, trainingActivity: itemValue } }))
+              setUserDetails((prevState) => ({
+                ...prevState,
+                bodyValues: {
+                  ...prevState.bodyValues,
+                  trainingActivity: itemValue,
+                },
+              }))
             }
           >
             <Picker.Item label="Never" value="never" />
@@ -121,11 +198,14 @@ export default function CreateAccountBodyForm() {
           </Picker>
           <Text style={styles.pickerText}>Body type</Text>
           <Picker
-            mode='dropdown'
+            mode="dropdown"
             style={styles.picker}
             selectedValue={userDetails.bodyValues.bodyType}
             onValueChange={(itemValue) =>
-              setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, bodyType: itemValue } }))
+              setUserDetails((prevState) => ({
+                ...prevState,
+                bodyValues: { ...prevState.bodyValues, bodyType: itemValue },
+              }))
             }
           >
             <Picker.Item label="Skinny" value="Skinny" />
@@ -134,11 +214,14 @@ export default function CreateAccountBodyForm() {
           </Picker>
           <Text style={styles.pickerText}>Goal</Text>
           <Picker
-            mode='dropdown'
+            mode="dropdown"
             style={styles.picker}
             selectedValue={userDetails.bodyValues.goal}
             onValueChange={(itemValue) =>
-              setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, goal: itemValue } }))
+              setUserDetails((prevState) => ({
+                ...prevState,
+                bodyValues: { ...prevState.bodyValues, goal: itemValue },
+              }))
             }
           >
             <Picker.Item label="Lose weight" value="lose weight" />
@@ -147,11 +230,14 @@ export default function CreateAccountBodyForm() {
           </Picker>
           <Text style={styles.pickerText}>Time goal</Text>
           <Picker
-            mode='dropdown'
+            mode="dropdown"
             style={styles.picker}
             selectedValue={userDetails.bodyValues.timeGoal}
             onValueChange={(itemValue) =>
-              setUserDetails(prevState => ({ ...prevState, bodyValues: { ...prevState.bodyValues, timeGoal: itemValue } }))
+              setUserDetails((prevState) => ({
+                ...prevState,
+                bodyValues: { ...prevState.bodyValues, timeGoal: itemValue },
+              }))
             }
           >
             <Picker.Item label="1 month" value="1 month" />
@@ -173,50 +259,50 @@ export default function CreateAccountBodyForm() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   scrollView: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingBottom: 30,
   },
   headerText: {
     fontSize: 26,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
     paddingVertical: 20,
   },
   parText: {
     width: 280,
     fontSize: 18,
-    fontWeight: 'normal',
-    color: 'black',
+    fontWeight: "normal",
+    color: "black",
     paddingBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   textInput: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     width: 280,
     height: 50,
     margin: 12,
     borderWidth: 1,
-    borderColor: 'lightgrey',
+    borderColor: "lightgrey",
     borderRadius: 5,
     padding: 12,
   },
   pickersContainer: {
     paddingTop: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   picker: {
     width: 200,
   },
   pickerText: {
-    color: 'black',
+    color: "black",
     fontSize: 22,
-    fontWeight: 'normal',
+    fontWeight: "normal",
     paddingTop: 10,
   },
 });
