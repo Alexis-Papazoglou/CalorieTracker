@@ -21,6 +21,7 @@
     "expo-status-bar": "~1.11.1",
     "expo-updates": "~0.24.11",
     "firebase": "^10.8.0",
+    "lottie-react-native": "^6.6.0",
     "react": "18.2.0",
     "react-native": "0.73.4",
     "react-native-calendars": "^1.1303.0",

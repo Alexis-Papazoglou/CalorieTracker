@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../Context/ContextProvider";
 import { getDoc, doc } from "firebase/firestore";
@@ -41,13 +41,13 @@ export default function Profile() {
   }, [user]);
 
   return (
-    <View>
+    <SafeAreaView>
       <Text>{hello}</Text>
       {user && <Text>Welcome, {user.displayName || user.email}!</Text>}
       {userData && <Text>Username: {userData}</Text>}
 
       <Button title="Sign Out" onPress={signOut} />
-    </View>
+    </SafeAreaView>
   );
 }
 

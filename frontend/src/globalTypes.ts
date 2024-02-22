@@ -29,4 +29,5 @@ export interface User {
   uid: string;
   username: string;
   userMeals?: Meal[]; // subcollection
+  photoURL?: string;
 }
