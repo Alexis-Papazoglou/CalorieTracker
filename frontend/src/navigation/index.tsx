@@ -58,7 +58,6 @@ function MainTabs() {
 
 export default function Navigation() {
   const auth = useAuth();
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -67,14 +66,8 @@ export default function Navigation() {
         ) : (
           <>
             <Stack.Screen name="SignIn" component={SignInScreen} />
-            <Stack.Screen
-              name="CreateAccountBodyForm"
-              component={CreateAccountBodyForm}
-            />
-            <Stack.Screen
-              name="CreateAccountAuthDetails"
-              component={CreateAccountAuthDetails}
-            />
+            <Stack.Screen name="CreateAccountBodyForm" component={CreateAccountBodyForm} />
+            <Stack.Screen name="CreateAccountAuthDetails" component={CreateAccountAuthDetails} />
           </>
         )}
       </Stack.Navigator>

@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 import { Meal } from "../../globalTypes";
 import useFetchMealsOfDay from "../../../hooks/useFetchMealsOfDay";
 import { getDate } from "../../utils";
-import MealCard from "./DayMealCard";
 import { hardShadow, primaryShadow, secondaryShadow } from "../../constants/shadows";
+import DayMealCard from "./DayMealCard";
 
 interface TodayMealsProps {
   date: string;
@@ -31,7 +31,10 @@ export default function DayMealsContainer({ date, appearedMealsNumber }: TodayMe
     <View style={styles.container}>
       {date === "recent" && <Text style={styles.headerText}>Recent Meals</Text>}
       <View style={styles.contentContainer}>
-        {mealsData.length > 0 && mealsData.map((meal, index) => <MealCard key={index} meal={meal} />)}
+        {mealsData.length > 0 &&
+          mealsData
+            .sort((a, b) => Number(b.date) - Number(a.date))
+            .map((meal, index) => <DayMealCard key={index} meal={meal} />)}
         {mealsData.length === 0 && <Text style={styles.noMealsText}>No meals found!</Text>}
       </View>
     </View>

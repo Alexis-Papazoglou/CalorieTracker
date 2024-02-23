@@ -8,25 +8,20 @@ import { secondaryShadow } from "../../constants/shadows";
 interface FoodItemComponentProps {
   item: FoodItem;
   index: number;
-  setAnalysis: React.Dispatch<React.SetStateAction<Meal | null>>;
+  setAnalysis: React.Dispatch<React.SetStateAction<Meal | null>> | null;
 }
 
-const FoodItemComponent: React.FC<FoodItemComponentProps> = ({
-  item,
-  index,
-  setAnalysis,
-}) => {
+const FoodItemComponent: React.FC<FoodItemComponentProps> = ({ item, index, setAnalysis }) => {
   function handleChange(arg0: string, text: string): void {
+    if (!setAnalysis) return;
     setAnalysis((prevState: Meal | null) => {
       if (prevState) {
-        const newFoodItems = prevState.food_items.map(
-          (foodItem: FoodItem, i: number) => {
-            if (i === index) {
-              return { ...foodItem, [arg0]: text ? parseFloat(text) : 0 };
-            }
-            return foodItem;
+        const newFoodItems = prevState.food_items.map((foodItem: FoodItem, i: number) => {
+          if (i === index) {
+            return { ...foodItem, [arg0]: text ? parseFloat(text) : 0 };
           }
-        );
+          return foodItem;
+        });
 
         return { ...prevState, food_items: newFoodItems };
       }
@@ -45,11 +40,10 @@ const FoodItemComponent: React.FC<FoodItemComponentProps> = ({
           text: "Delete",
           style: "destructive",
           onPress: () => {
+            if (!setAnalysis) return;
             setAnalysis((prevState: Meal | null) => {
               if (prevState) {
-                const newFoodItems = prevState.food_items.filter(
-                  (_, i) => i !== index
-                );
+                const newFoodItems = prevState.food_items.filter((_, i) => i !== index);
                 return { ...prevState, food_items: newFoodItems };
               }
               return null;
@@ -59,10 +53,7 @@ const FoodItemComponent: React.FC<FoodItemComponentProps> = ({
       ]);
     } else {
       handleChange("quantity", (item.quantity + delta).toString());
-      handleChange(
-        "multipliedCalories",
-        (item.calories * (item.quantity + delta)).toString()
-      );
+      handleChange("multipliedCalories", (item.calories * (item.quantity + delta)).toString());
     }
   }
 
@@ -70,9 +61,7 @@ const FoodItemComponent: React.FC<FoodItemComponentProps> = ({
     <View style={styles.item}>
       <View style={styles.row}>
         <View style={styles.details}>
-          <Text style={styles.foodTitle}>
-            {item.food.charAt(0).toUpperCase() + item.food.slice(1)}
-          </Text>
+          <Text style={styles.foodTitle}>{item.food.charAt(0).toUpperCase() + item.food.slice(1)}</Text>
           <Text style={styles.value}>Weight: {item.weight}</Text>
           <Text style={styles.value}>Protein: {item.protein}</Text>
           <Text style={styles.value}>Fat: {item.fat}</Text>
@@ -80,36 +69,16 @@ const FoodItemComponent: React.FC<FoodItemComponentProps> = ({
         <View style={styles.controls}>
           <View>
             <View style={styles.quantityChanger}>
-              <TouchableOpacity
-                style={[styles.changeCalBtn, styles.dcBtn]}
-                onPress={() => handleQuantityChange(-1)}
-              >
+              <TouchableOpacity style={[styles.changeCalBtn, styles.dcBtn]} onPress={() => handleQuantityChange(-1)}>
                 <Text style={styles.btnText}>-</Text>
               </TouchableOpacity>
-              <Text
-                style={[
-                  styles.value,
-                  { fontWeight: "700", textAlign: "center" },
-                ]}
-              >
-                {item.quantity}
-              </Text>
-              <TouchableOpacity
-                style={[styles.changeCalBtn, styles.incBtn]}
-                onPress={() => handleQuantityChange(1)}
-              >
+              <Text style={[styles.value, { fontWeight: "700", textAlign: "center" }]}>{item.quantity}</Text>
+              <TouchableOpacity style={[styles.changeCalBtn, styles.incBtn]} onPress={() => handleQuantityChange(1)}>
                 <Text style={styles.btnText}>+</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.calorieInput}>
-              <Text
-                style={[
-                  styles.value,
-                  { fontWeight: "500", textAlign: "center" },
-                ]}
-              >
-                kcal:
-              </Text>
+              <Text style={[styles.value, { fontWeight: "500", textAlign: "center" }]}>kcal:</Text>
               <TextInput
                 style={styles.calInput}
                 onChangeText={(text) => handleChange("calories", text)}

@@ -3,18 +3,23 @@ import React from "react";
 import { formatDate } from "../../utils";
 import { Meal } from "../../globalTypes";
 import { primaryShadow } from "../../constants/shadows";
-// import useOpenDayMealCardModal from "../../../hooks/useOpenDayMealCardModal";
+import { useModalContext } from "../../../Context/ModalContext";
 
 interface MealCardProps {
   meal: Meal;
 }
 
 const DayMealCard: React.FC<MealCardProps> = ({ meal }) => {
-  // const { toggleModal } = useOpenDayMealCardModal(meal);
+  const { openModal } = useModalContext(); // Use the hook to get openModal
+
+  const handlePress = () => {
+    openModal(meal); // Open the modal with the current meal
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.date}>{formatDate(meal.date)}</Text>
-      <TouchableOpacity style={styles.contentContainer}>
+      <TouchableOpacity style={styles.contentContainer} onPress={handlePress}>
         <ImageBackground source={{ uri: meal.imageUrl }} style={styles.imageBackground}>
           <View style={styles.overlay}>
             <Text style={styles.text}>{meal.general_title}</Text>

@@ -1,4 +1,4 @@
-import { Button, ScrollView, StyleSheet, Text, View, SafeAreaView, ImageBackground, Image } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, View, SafeAreaView, ImageBackground, Image, Modal } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../Context/ContextProvider";
 import { getDoc, doc } from "firebase/firestore";
@@ -6,12 +6,12 @@ import { firestore } from "../../../firebase";
 import { User, Meal } from "../../globalTypes";
 import useFetchMealsOfDay from "../../../hooks/useFetchMealsOfDay";
 import HomeBackground from "../../../assets/bg (5).png";
-import DayMeals from "../../components/ReusableComponents/DayMealsContainer";
 import { getDate } from "../../utils";
 import { primaryShadow, secondaryShadow } from "../../constants/shadows";
 import { textColors } from "../../constants/colors";
 import DailyTrackbar from "../../components/HomeScreenComponents/DailyTrackbar";
-// import TouchAnimatedModal from "../../components/ReusableComponents/TouchAnimatedModal";
+import DayMealsContainer from "../../components/ReusableComponents/DayMealsContainer";
+import DayMealCardModal from "../../components/ReusableComponents/DayMealCardModal";
 
 export default function Home() {
   const [userData, setUserData] = useState<User>();
@@ -55,7 +55,7 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <TouchAnimatedModal /> */}
+      <DayMealCardModal />
       <ImageBackground source={HomeBackground} style={styles.backgroundImage}>
         <View style={styles.opacityLayer}>
           {userData && (
@@ -71,7 +71,7 @@ export default function Home() {
               <View>
                 <DailyTrackbar dailyCalories={userData.dailyCalories} totalCaloriesFromMeals={totalCaloriesFromMeals} />
                 {todaysError && <Text>{todaysError}</Text>}
-                <DayMeals date={"recent"} appearedMealsNumber={4} />
+                <DayMealsContainer date={"recent"} appearedMealsNumber={4} />
               </View>
             )}
           </ScrollView>

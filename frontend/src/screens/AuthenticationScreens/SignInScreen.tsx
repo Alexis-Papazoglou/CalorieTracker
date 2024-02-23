@@ -1,13 +1,6 @@
 // SignInScreen.tsx
-import React, { useState, useContext } from "react";
-import {
-  Button,
-  TextInput,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { Button, TextInput, Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../../Context/ContextProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -16,10 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { colors } from "../../constants/colors";
 import { primaryButton, primaryButtonText } from "../../constants/buttons";
 
-type SignInScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "SignIn"
->;
+type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, "SignIn">;
 
 export default function SignInScreen() {
   const navigation = useNavigation<SignInScreenNavigationProp>();
@@ -27,6 +17,16 @@ export default function SignInScreen() {
   const [password, setPassword] = useState("1234567890");
   const auth = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
+
+  // to hit server instantly when app loads to wake him up
+  useEffect(() => {
+    async function fetchHello() {
+      const res = await fetch("https://foodimageanalysisapi.onrender.com/");
+      const data = await res.json();
+      console.log(data);
+    }
+    fetchHello();
+  }, []);
 
   const handleSignIn = async () => {
     try {
@@ -45,17 +45,12 @@ export default function SignInScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.welcomeTextView}>
         <Text style={styles.welcomeText}>Welcome to</Text>
-        <Text style={[styles.welcomeText, { color: "red" , fontFamily:'AmericanTypewriter' , fontSize: 32 }]}>
+        <Text style={[styles.welcomeText, { color: "red", fontFamily: "AmericanTypewriter", fontSize: 32 }]}>
           CALORIE TRACKER
         </Text>
       </View>
       {error && <Text style={styles.error}>{error}</Text>}
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email"
-      />
+      <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Email" />
       <TextInput
         style={styles.input}
         value={password}
@@ -90,8 +85,8 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 30,
     fontWeight: "bold",
-    width: '100%',
-    alignSelf: 'flex-start',
+    width: "100%",
+    alignSelf: "flex-start",
     paddingHorizontal: 10,
   },
   input: {
