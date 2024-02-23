@@ -17,6 +17,7 @@ import { Alert } from "react-native";
 import useSaveMeal from "../../../hooks/useSaveMeal";
 import { FoodItem } from "../../globalTypes";
 import { primaryButton, primaryButtonText } from "../../constants/buttons";
+import FoodItemComponent from "../ReusableComponents/FoodItemComponent";
 
 interface ImageAnalysisProps {
   close: () => void;
@@ -25,101 +26,23 @@ interface ImageAnalysisProps {
 const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
   const { saveMeal, loading: SaveLoading } = useSaveMeal();
   const [description, setDescription] = useState<string>("");
-  const {
-    takeImage,
-    pickImageFromGallery,
-    analyzeImage,
-    image,
-    setImage,
-    analysis,
-    setAnalysis,
-    loading,
-    error,
-  } = useImageAnalysis(
-    "https://foodimageanalysisapi.onrender.com/analyze",
-    description
-  );
+  const { takeImage, pickImageFromGallery, analyzeImage, image, setImage, analysis, setAnalysis, loading, error } =
+    useImageAnalysis("https://foodimageanalysisapi.onrender.com/analyze", description);
   const [totalMealCalories, setTotalMealCalories] = useState<number>(0);
-  // const [image, setImage] = useState<string | null>("null");
-  // const [analysis, setAnalysis] = useState({
-  //   food_items: [
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //     {
-  //       calories: 330,
-  //       fat: 14,
-  //       food: "chicken breast",
-  //       protein: 49,
-  //       weight: 200,
-  //     },
-  //   ],
-  //   general_title: "Baked Chicken Breasts",
-  // });
   const [buttonText, setButtonText] = useState<string>("Save Meal");
 
+  // This use effect adds some more data to the analysis object (Meal)
+  // because the backend does not return some of the data that we need
   useEffect(() => {
     if (analysis && analysis.food !== "no items") {
       let totalCalories = 0;
       analysis.food_items.forEach((item) => {
-        totalCalories += item.calories;
+        item.quantity = item.quantity || 1;
+        item.multipliedCalories = item.calories * item.quantity;
+        totalCalories += item.multipliedCalories;
       });
       setTotalMealCalories(totalCalories);
 
-      // Check if general_title is empty and set it to the first food item's title
       if (!analysis.general_title && analysis.food_items.length > 0) {
         setAnalysis((prevState) => {
           if (prevState) {
@@ -176,7 +99,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
 
   function handleSaveMeal() {
     if (analysis && totalMealCalories && image) {
-      saveMeal(analysis, totalMealCalories, image);
+      saveMeal(analysis, totalMealCalories);
     } else {
       console.log(analysis, totalMealCalories, image);
       alert("Something goes wrong.");
@@ -184,56 +107,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
   }
 
   const renderItem = ({ item, index }: { item: FoodItem; index: number }) => {
-    function handleChange(arg0: string, text: string): void {
-      // console.log(analysis);
-      setAnalysis((prevState) => {
-        if (prevState) {
-          const newFoodItems = prevState.food_items.map((foodItem, i) => {
-            if (i === index) {
-              return { ...foodItem, calories: text ? parseInt(text) : 0 };
-            }
-            return foodItem;
-          });
-
-          return {
-            ...prevState,
-            food_items: newFoodItems,
-          };
-        }
-        return null;
-      });
-    }
-
-    return (
-      <View style={styles.item}>
-        <Text style={styles.foodTitle}>
-          {item.food.charAt(0).toUpperCase() + item.food.slice(1)}
-        </Text>
-        <View style={styles.detailsView}>
-          <View>
-            <Text style={styles.value}>Weight: {item.weight}</Text>
-            <Text style={styles.value}>Protein: {item.protein}</Text>
-            <Text style={styles.value}>Fat: {item.fat}</Text>
-          </View>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text
-              style={[
-                styles.value,
-                { fontWeight: "500", textAlign: "center", paddingBottom: 5 },
-              ]}
-            >
-              Calories
-            </Text>
-            <TextInput
-              style={styles.calInput}
-              onChangeText={(text) => handleChange("calories", text)}
-              value={item.calories.toString()}
-              placeholder="Calories"
-            />
-          </View>
-        </View>
-      </View>
-    );
+    return <FoodItemComponent item={item} index={index} setAnalysis={setAnalysis} />;
   };
 
   return (
@@ -244,13 +118,9 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
         </TouchableOpacity>
         <Text style={{ fontSize: 24 }}>Food Image Analysis</Text>
         <View style={styles.textContainer}>
+          <Text style={styles.dummyText}>Take a picture of food or upload one from your gallery to get started!</Text>
           <Text style={styles.dummyText}>
-            Take a picture of food or upload one from your gallery to get
-            started!
-          </Text>
-          <Text style={styles.dummyText}>
-            It would be very useful to add a description to help the AI
-            recognize the food.
+            It would be very useful to add a description to help the AI recognize the food.
           </Text>
           {image && <Image source={{ uri: image }} style={styles.image} />}
           <TextInput
@@ -261,34 +131,18 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
             placeholderTextColor={"gray"}
           />
           {!image && (
-            <TouchableOpacity
-              disabled={loading}
-              onPress={takeImage}
-              style={styles.button}
-            >
-              <Text style={{ color: colors.primary, fontSize: 16 }}>
-                Take Picture
-              </Text>
+            <TouchableOpacity disabled={loading} onPress={takeImage} style={styles.button}>
+              <Text style={{ color: colors.primary, fontSize: 16 }}>Take Picture</Text>
             </TouchableOpacity>
           )}
           {!image && (
-            <TouchableOpacity
-              disabled={loading}
-              onPress={pickImageFromGallery}
-              style={styles.button}
-            >
-              <Text style={{ color: colors.primary, fontSize: 16 }}>
-                Pick from Gallery
-              </Text>
+            <TouchableOpacity disabled={loading} onPress={pickImageFromGallery} style={styles.button}>
+              <Text style={{ color: colors.primary, fontSize: 16 }}>Pick from Gallery</Text>
             </TouchableOpacity>
           )}
           <View style={{ flexDirection: "row" }}>
             {image && (
-              <TouchableOpacity
-                disabled={loading}
-                onPress={handleAnalyzeImage}
-                style={styles.button}
-              >
+              <TouchableOpacity disabled={loading} onPress={handleAnalyzeImage} style={styles.button}>
                 <Text
                   style={{
                     color: colors.primary,
@@ -301,11 +155,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
               </TouchableOpacity>
             )}
             {image && (
-              <TouchableOpacity
-                disabled={loading}
-                onPress={handleReset}
-                style={styles.button}
-              >
+              <TouchableOpacity disabled={loading} onPress={handleReset} style={styles.button}>
                 <Text
                   style={{
                     color: colors.primary,
@@ -325,9 +175,7 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
           <View style={styles.analysisView}>
             <Text style={styles.mealTitle}>{analysis.general_title}</Text>
             {analysis.food !== "no items" && (
-              <Text style={styles.totalCals}>
-                Total meal calories: {totalMealCalories}
-              </Text>
+              <Text style={styles.totalCals}>Total meal calories: {totalMealCalories}</Text>
             )}
             <FlatList
               data={analysis.food_items}
@@ -337,16 +185,11 @@ const ImageAnalysis: React.FC<ImageAnalysisProps> = ({ close }) => {
               ListFooterComponent={
                 <View style={{ alignItems: "center" }}>
                   {analysis.food !== "no items" ? (
-                    <TouchableOpacity
-                      onPress={handleSaveMeal}
-                      style={primaryButton}
-                    >
+                    <TouchableOpacity onPress={handleSaveMeal} style={primaryButton}>
                       <Text style={primaryButtonText}>{buttonText}</Text>
                     </TouchableOpacity>
                   ) : (
-                    <Text style={{ color: "red", fontSize: 20 }}>
-                      No items found
-                    </Text>
+                    <Text style={{ color: "red", fontSize: 20 }}>No items found</Text>
                   )}
                   <View style={{ height: 600 }} />
                 </View>
@@ -422,18 +265,6 @@ const styles = StyleSheet.create({
     color: "red",
     marginTop: 20,
   },
-  item: {
-    borderWidth: 1,
-    borderColor: "lightgray",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    backgroundColor: colors.primary,
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
   analysisView: {
     alignItems: "center",
     width: "100%",
@@ -456,32 +287,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     alignSelf: "flex-start",
-  },
-  value: {
-    fontSize: 16,
-    textAlign: "left",
-  },
-  foodTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  calInput: {
-    height: 30,
-    borderColor: "grey",
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    width: 70,
-    textAlign: "center",
-    ...secondaryShadow,
-    color: colors.secondary,
-    alignSelf: "flex-end",
-  },
-  detailsView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 5,
   },
 });
 

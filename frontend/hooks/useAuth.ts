@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  User,
-} from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, User } from "firebase/auth";
 import { signOut as signOutFromFirebase } from "firebase/auth";
 import { auth as firebaseAuth, firestore } from "../firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
@@ -49,11 +44,7 @@ export function useAuth(): AuthContextProps {
   const signIn = async (email: string, password: string) => {
     if (!firebaseAuth) return;
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        firebaseAuth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
       const user = userCredential.user;
       setUser(user);
     } catch (error) {
@@ -82,11 +73,7 @@ export function useAuth(): AuthContextProps {
   ) => {
     if (!firebaseAuth || !firestore) return;
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        firebaseAuth,
-        email,
-        password
-      );
+      const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
       const user = userCredential.user;
       setUser(user);
 
@@ -106,18 +93,13 @@ export function useAuth(): AuthContextProps {
           trainingActivity: bodyValues.trainingActivity,
         },
         dailyCalories: dailyCalories,
+        userImage: "",
       });
 
       // Create a new userMeals subcollection in Firestore
-      await setDoc(
-        doc(
-          collection(doc(firestore, "users", uid), "userMeals"),
-          "initialDocument"
-        ),
-        {
-          test: "test",
-        }
-      );
+      await setDoc(doc(collection(doc(firestore, "users", uid), "userMeals"), "initialDocument"), {
+        test: "test",
+      });
     } catch (error) {
       if (error instanceof Error) {
         setLastError(error.message);

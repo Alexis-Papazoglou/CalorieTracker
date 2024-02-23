@@ -4,10 +4,15 @@ import DatesCalendar from "../../components/DatesCalendar";
 
 export default function Calendar() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <DatesCalendar />
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+});

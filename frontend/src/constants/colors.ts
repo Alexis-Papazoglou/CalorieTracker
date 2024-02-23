@@ -1,7 +1,8 @@
 export const colors = {
   primary: "white",
   secondary: "#222",
-  tertiary: "red",
+  tertiary: "#FF6B6B",
+  darkerTertiary: "#FF0000",
 };
 
 export const textColors = {

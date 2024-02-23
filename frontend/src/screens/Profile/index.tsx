@@ -41,7 +41,7 @@ export default function Profile() {
   }, [user]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <Text>{hello}</Text>
       {user && <Text>Welcome, {user.displayName || user.email}!</Text>}
       {userData && <Text>Username: {userData}</Text>}
@@ -51,4 +51,11 @@ export default function Profile() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+});

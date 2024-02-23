@@ -8,14 +8,14 @@ const useSaveMeal = () => {
   const [loading, setLoading] = useState(false);
   const auth = useContext(AuthContext);
 
-  const saveMeal = async (meal: Meal, totalMealCalories: number, image: string) => {
+  const saveMeal = async (meal: Meal, totalMealCalories: number) => {
     setLoading(true);
 
     try {
       if (!auth?.user) throw new Error("No user logged in");
 
       const timestamp = Date.now().toString(); // get current timestamp
-      const mealData = { ...meal, totalMealCalories, date: timestamp, imageUrl: image };
+      const mealData = { ...meal, totalMealCalories, date: timestamp };
 
       const mealRef = doc(firestore, "users", auth.user.uid, "userMeals", timestamp);
       await setDoc(mealRef, mealData);

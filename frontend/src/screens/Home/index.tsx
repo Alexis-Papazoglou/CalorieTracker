@@ -1,13 +1,4 @@
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  ImageBackground,
-  Image,
-} from "react-native";
+import { Button, ScrollView, StyleSheet, Text, View, SafeAreaView, ImageBackground, Image } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../Context/ContextProvider";
 import { getDoc, doc } from "firebase/firestore";
@@ -15,15 +6,16 @@ import { firestore } from "../../../firebase";
 import { User, Meal } from "../../globalTypes";
 import useFetchMealsOfDay from "../../../hooks/useFetchMealsOfDay";
 import HomeBackground from "../../../assets/bg (5).png";
-import DayMeals from "../../components/HomeScreenComponents/DayMeals";
+import DayMeals from "../../components/ReusableComponents/DayMealsContainer";
 import { getDate } from "../../utils";
 import { primaryShadow, secondaryShadow } from "../../constants/shadows";
 import { textColors } from "../../constants/colors";
 import DailyTrackbar from "../../components/HomeScreenComponents/DailyTrackbar";
+// import TouchAnimatedModal from "../../components/ReusableComponents/TouchAnimatedModal";
 
 export default function Home() {
   const [userData, setUserData] = useState<User>();
-  const [totalCalories, setTotalCalories] = useState<number>(0); // New state variable
+  const [totalCaloriesFromMeals, setTotalCaloriesFromMeals] = useState<number>(0); // New state variable
   const auth = useContext(AuthContext);
   if (!auth) {
     // handle the case where the auth context is not provided
@@ -33,23 +25,23 @@ export default function Home() {
 
   // Fetch  meals
   const today = getDate("today"); // utility function to get a day's date
-  const { meals: todayMealsData, error: todaysError } =
-    useFetchMealsOfDay(today);
-  const yesterday = getDate("yesterday"); // utility function to get a day's date
-  const { meals: yesterdayMealsData, error: yesterdayError } =
-    useFetchMealsOfDay(yesterday);
+  const { meals: todayMealsData, error: todaysError } = useFetchMealsOfDay(today);
 
   useEffect(() => {
     async function fetchUserData() {
-      if (user) {
-        const docRef = doc(firestore, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+      try {
+        if (user) {
+          const docRef = doc(firestore, "users", user.uid);
+          const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          setUserData(docSnap.data() as User);
-        } else {
-          console.log("No such document!");
+          if (docSnap.exists()) {
+            setUserData(docSnap.data() as User);
+          } else {
+            console.log("No such document!");
+          }
         }
+      } catch (error) {
+        throw new Error("Error getting document: " + error);
       }
     }
     fetchUserData();
@@ -57,40 +49,29 @@ export default function Home() {
 
   useEffect(() => {
     // Calculate total calories whenever meals change
-    const total = todayMealsData.reduce(
-      (total, meal) => total + (meal.totalMealCalories || 0),
-      0
-    );
-    setTotalCalories(total);
+    const total = todayMealsData.reduce((total, meal) => total + (meal.totalMealCalories || 0), 0);
+    setTotalCaloriesFromMeals(total);
   }, [todayMealsData]);
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* <TouchAnimatedModal /> */}
       <ImageBackground source={HomeBackground} style={styles.backgroundImage}>
         <View style={styles.opacityLayer}>
           {userData && (
             <View style={styles.welcomeContainer}>
-              <Text style={styles.welcomeText}>
-                Welcome {userData.username}!
-              </Text>
+              <Text style={styles.welcomeText}>Welcome {userData.username}!</Text>
               <View style={styles.profileImageContainer}>
-                <Image
-                  style={styles.profileImage}
-                  source={{ uri: userData.photoURL }}
-                />
+                <Image style={styles.profileImage} source={{ uri: userData.userImage }} />
               </View>
             </View>
           )}
-          <ScrollView style={styles.scrollView}>
+          <ScrollView contentContainerStyle={styles.scrollView}>
             {userData && (
               <View>
-                <DailyTrackbar
-                  dailyCalories={userData.dailyCalories}
-                  totalCalories={totalCalories}
-                />
-                {todaysError && <Text>Error fetching meals{todaysError}</Text>}
-                <DayMeals date={today} meals={todayMealsData} />
-                <DayMeals date={yesterday} meals={yesterdayMealsData} />
+                <DailyTrackbar dailyCalories={userData.dailyCalories} totalCaloriesFromMeals={totalCaloriesFromMeals} />
+                {todaysError && <Text>{todaysError}</Text>}
+                <DayMeals date={"recent"} appearedMealsNumber={4} />
               </View>
             )}
           </ScrollView>
@@ -116,9 +97,9 @@ const styles = StyleSheet.create({
     resizeMode: "cover", // or 'stretch'
   },
   scrollView: {
-    flex: 1,
     width: "100%",
     paddingTop: 10,
+    paddingBottom: 20,
   },
   welcomeText: {
     fontSize: 30,
@@ -130,14 +111,14 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     ...primaryShadow,
-    marginRight: 12,
+    marginRight: 10,
   },
   profileImage: {
-    width: 50,
-    height: 50,
+    width: 45,
+    height: 45,
     borderRadius: 50,
-    borderWidth: 2,
-    borderColor: "lightgrey",
+    borderWidth: 1,
+    borderColor: "black",
   },
   welcomeContainer: {
     width: "100%",

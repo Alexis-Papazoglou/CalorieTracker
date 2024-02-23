@@ -1,7 +1,8 @@
 import { TextStyle } from "react-native";
+import { colors } from "./colors";
 
 export const primaryButton = {
-  backgroundColor: "#FF6B6B",
+  backgroundColor: colors.darkerTertiary,
   borderRadius: 10,
   padding: 14,
   elevation: 2,

@@ -4,6 +4,8 @@ export interface FoodItem {
   calories: number;
   fat: number;
   protein: number;
+  quantity: number;
+  multipliedCalories: number; // created on frontend
 }
 
 export interface Meal {
@@ -29,5 +31,5 @@ export interface User {
   uid: string;
   username: string;
   userMeals?: Meal[]; // subcollection
-  photoURL?: string;
+  userImage?: string;
 }

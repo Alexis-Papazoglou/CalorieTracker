@@ -3,10 +3,17 @@ import React from "react";
 
 export default function Recipes() {
   return (
-    <SafeAreaView>
-      <Text>Recipes</Text>
+    <SafeAreaView style={styles.container}>
+      <Text>Coming soon...</Text>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+});

@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { primaryShadow, secondaryShadow } from "../../constants/shadows";
-import LottieView from 'lottie-react-native';
+import { hardShadow, primaryShadow, secondaryShadow } from "../../constants/shadows";
+import LottieView from "lottie-react-native";
+import { colors } from "../../constants/colors";
 
 interface props {
   dailyCalories: number;
-  totalCalories: number;
+  totalCaloriesFromMeals: number;
 }
 
-export default function DailyTrackbar({ dailyCalories, totalCalories }: props) {
+export default function DailyTrackbar({ dailyCalories, totalCaloriesFromMeals: totalCalories }: props) {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Daily Track</Text>
@@ -23,7 +24,7 @@ export default function DailyTrackbar({ dailyCalories, totalCalories }: props) {
           <View>
             <LottieView
               source={require("../../../assets/likeanime.json")}
-              style={{ width: 55, height: 55 , marginBottom: 5}}
+              style={{ width: 55, height: 55, marginBottom: 5 }}
               autoPlay
               speed={0.2}
             />
@@ -33,16 +34,17 @@ export default function DailyTrackbar({ dailyCalories, totalCalories }: props) {
           <View
             style={{
               ...styles.innerBar,
-              width: `${(totalCalories / dailyCalories) * 100}%`,
+              maxWidth: `${(totalCalories / dailyCalories) * 100}%`,
             }}
           ></View>
           <Text
             style={{
               position: "absolute",
-              right: 5,
-              top: 2.5,
-              color: "white",
-              fontWeight: "700",
+              right: (totalCalories / dailyCalories) * 100 > 85 ? undefined : 8,
+              left: (totalCalories / dailyCalories) * 100 > 85 ? 8 : undefined,
+              top: 4.5,
+              color: (totalCalories / dailyCalories) * 100 > 85 ? "red" : "white",
+              fontWeight: "800",
             }}
           >
             {Math.floor((totalCalories / dailyCalories) * 100)}%
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    ...secondaryShadow,
+    ...hardShadow,
     padding: 20,
     borderRadius: 10,
     marginTop: 10,
@@ -101,15 +103,15 @@ const styles = StyleSheet.create({
   },
   outerBar: {
     width: "102%",
-    height: 22,
-    backgroundColor: "red",
+    height: 26,
+    backgroundColor: colors.darkerTertiary,
     borderRadius: 10,
     justifyContent: "center",
     paddingHorizontal: 5,
     ...secondaryShadow,
   },
   innerBar: {
-    height: 12,
+    height: 16,
     backgroundColor: "white",
     borderRadius: 10,
   },

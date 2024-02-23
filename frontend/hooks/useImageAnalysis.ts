@@ -13,20 +13,18 @@ const useImageAnalysis = (url: string, description: string | null) => {
 
   const takeImage = async () => {
     image && setImage(null); // clear the previous image to avoid memory leaks
-    const { status: cameraPerm } =
-      await ImagePicker.requestCameraPermissionsAsync();
+    const { status: cameraPerm } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (cameraPerm !== "granted") {
       alert("Sorry, we need camera permissions to make this work!");
       return;
     }
 
-    let result: ImagePicker.ImagePickerResult =
-      await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: false,
-        quality: 1,
-      });
+    let result: ImagePicker.ImagePickerResult = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      quality: 1,
+    });
 
     if (!result.canceled) {
       let successResult = result as ImagePicker.ImagePickerSuccessResult;
@@ -38,20 +36,18 @@ const useImageAnalysis = (url: string, description: string | null) => {
 
   const pickImageFromGallery = async () => {
     image && setImage(null); // clear the previous image to avoid memory leaks
-    const { status: mediaLibPerm } =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status: mediaLibPerm } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (mediaLibPerm !== "granted") {
       alert("Sorry, we need media library permissions to make this work!");
       return;
     }
 
-    let result: ImagePicker.ImagePickerResult =
-      await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: false,
-        quality: 1,
-      });
+    let result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      quality: 1,
+    });
 
     if (!result.canceled) {
       let successResult = result as ImagePicker.ImagePickerSuccessResult;
@@ -75,11 +71,10 @@ const useImageAnalysis = (url: string, description: string | null) => {
       const imageRef = ref(storage, `${imageId}`);
 
       //resize to reduce the upload size and time
-      const resizedImage = await ImageManipulator.manipulateAsync(
-        image,
-        [{ resize: { width: 1000 } }],
-        { compress: 0.85, format: ImageManipulator.SaveFormat.JPEG }
-      );
+      const resizedImage = await ImageManipulator.manipulateAsync(image, [{ resize: { width: 1000 } }], {
+        compress: 0.85,
+        format: ImageManipulator.SaveFormat.JPEG,
+      });
 
       // Convert the URI to a Blob
       const blobRes = await fetch(resizedImage.uri);
@@ -91,8 +86,7 @@ const useImageAnalysis = (url: string, description: string | null) => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          var progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
         },
         (error) => {
@@ -117,6 +111,7 @@ const useImageAnalysis = (url: string, description: string | null) => {
           if (response.ok) {
             console.log("Image uploaded successfully");
             const data = await response.json();
+            data.imageUrl = imageUrl;
             setAnalysis(data);
           } else {
             console.error("Image upload failed");

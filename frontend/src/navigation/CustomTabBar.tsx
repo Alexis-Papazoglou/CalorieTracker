@@ -81,8 +81,8 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
 
                     return (
                         <TouchableOpacity onPress={onPress} key={route.key} style={buttonStyle}>
-                            <Icon name={iconName} style={isAddButton ? styles.addIcon : styles.icon} color={isAddButton ? colors.primary : (isFocused ? colors.tertiary : colors.secondary)} />
-                            {isAddButton ? null : <Text style={[{ color: isFocused ? colors.tertiary : colors.secondary }, styles.text]}>
+                            <Icon name={iconName} style={isAddButton ? styles.addIcon : styles.icon} color={isAddButton ? colors.primary : (isFocused ? colors.darkerTertiary : colors.secondary)} />
+                            {isAddButton ? null : <Text style={[{ color: isFocused ? colors.darkerTertiary : colors.secondary }, styles.text]}>
                                 {label}
                             </Text>}
                             {isAddButton && <Text style={[{ color: colors.primary }, styles.addButtonText]}>
@@ -121,7 +121,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
             borderTopStartRadius: 20,
             borderBottomEndRadius: 20,
             borderBottomStartRadius: 20,
-            backgroundColor: colors.tertiary,
+            backgroundColor: colors.darkerTertiary,
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 8,
